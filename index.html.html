@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criação de Campanha | Caldeiraria Pai e Filhos | SEVEN</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #1E2A44;
+      --secondary: #6A3FB5;
+      --accent: #6BCB3D;
+      --dark: #0F1B2D;
+      --light: #E5E5E5;
+      --bg: #eef4f8;
+      --surface: #ffffff;
+      --border: #d6e3ea;
+      --text: #102332;
+      --text-muted: #597285;
+      --critical: #ff6b6b;
+      --warning: #ffd166;
+      --success: #27d3c3;
+    }
+
+    html, body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    body {
+      padding: 16px;
+    }
+
+    .app {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    /* ============ TOPBAR ============ */
+    .topbar {
+      background: linear-gradient(135deg, var(--dark), var(--primary));
+      padding: 24px 28px;
+      border-radius: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      color: white;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .topbar-left h1 {
+      font-size: 26px;
+      font-weight: 700;
+      margin: 0 0 4px 0;
+      letter-spacing: -0.5px;
+    }
+
+    .topbar-left p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .topbar-right {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .topbar-right small {
+      font-size: 11px;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .topbar-right strong {
+      font-size: 14px;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* ============ KPI GRID ============ */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .kpi-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--secondary), var(--accent));
+    }
+
+    .kpi-card:hover {
+      border-color: var(--secondary);
+      box-shadow: 0 8px 24px rgba(106, 63, 181, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .kpi-value {
+      font-size: 40px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 6px;
+      font-family: 'Courier New', monospace;
+      letter-spacing: -1px;
+    }
+
+    .kpi-status {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .kpi-status.success { color: var(--success); }
+
+    /* ============ PANEL ============ */
+    .panel {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 22px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .panel-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 6px 0;
+    }
+
+    .panel-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* ============ GRID 2 COLS ============ */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 18px;
+    }
+
+    /* ============ SETORES CARD ============ */
+    .setor-card {
+      padding: 16px;
+      background: #f8fbfd;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      transition: all 0.2s;
+    }
+
+    .setor-card:hover {
+      background: #f3fafc;
+      border-color: var(--secondary);
+    }
+
+    .setor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .setor-name {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .setor-count {
+      font-size: 18px;
+      font-weight: 800;
+      font-family: 'Courier New', monospace;
+      padding: 4px 10px;
+      background: linear-gradient(135deg, var(--secondary), var(--accent));
+      border-radius: 8px;
+      color: white;
+    }
+
+    .setor-bar {
+      height: 10px;
+      background: #e3edf3;
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 8px;
+    }
+
+    .setor-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--secondary), var(--accent));
+      transition: width 0.4s ease;
+      border-radius: 5px;
+    }
+
+    .setor-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ============ TABLE ============ */
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .table th {
+      background: #f4fafc;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      padding: 12px;
+      text-align: left;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .table tr:hover { background: #fbfdfe; }
+
+    /* ============ BADGE ============ */
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      background: #f8fbfd;
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* ============ TIMELINE ============ */
+    .timeline {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .timeline-item {
+      flex: 1;
+      padding: 12px;
+      background: #f8fbfd;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .timeline-item strong {
+      display: block;
+      font-size: 12px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .timeline-item small {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* ============ CHECKLIST ============ */
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: #f8fbfd;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 12px;
+    }
+
+    .checklist-item input {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    /* ============ CALLOUT ============ */
+    .callout {
+      padding: 14px;
+      border-left: 4px solid;
+      border-radius: 8px;
+      margin: 12px 0;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .callout.success {
+      background: #e8f5e9;
+      border-left-color: #27d3c3;
+      color: #0d5147;
+    }
+
+    .callout.success strong { color: #0d5147; }
+
+    /* ============ FOOTER ============ */
+    .footer {
+      margin-top: 40px;
+      padding: 20px;
+      border-top: 1.5px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 11px;
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 768px) {
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .topbar-right {
+        text-align: left;
+      }
+
+      .grid-2,
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline {
+        flex-direction: column;
+      }
+
+      .kpi-value {
+        font-size: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <h1>CRIAÇÃO DE CAMPANHA PSICOSSOCIAL</h1>
+      <p>Caldeiraria Pai e Filhos</p>
+    </div>
+    <div class="topbar-right">
+      <small>Projeto</small>
+      <strong>caldeiraria-pai-filhos-2026</strong>
+    </div>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Total de Colaboradores</div>
+      <div class="kpi-value">109</div>
+      <div class="kpi-status success">● Mapeados</div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">Setores Identificados</div>
+      <div class="kpi-value">3</div>
+      <div class="kpi-status success">● Refinaria | Indústria | Demalta</div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">Meta de Participação</div>
+      <div class="kpi-value">100%</div>
+      <div class="kpi-status success">● 109 respondentes</div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">Período de Coleta</div>
+      <div class="kpi-value">2</div>
+      <div class="kpi-status success">● 23-24 de Abril</div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 1: ESTRATÉGIA DE SETORIZAÇÃO -->
+  <div class="panel">
+    <h2 class="panel-title">Estratégia de Setorização</h2>
+    <p class="panel-subtitle">Mapeamento de 109 colaboradores por setor operacional</p>
+
+    <div style="margin-bottom: 20px;">
+      <p style="font-size: 13px; color: #355264; margin-bottom: 12px;">
+        A empresa Caldeiraria Pai e Filhos foi estruturada em <strong>3 setores estratégicos</strong> para coleta de dados psicossociais. Cada setor agrupa funções correlatas conforme operações reais.
+      </p>
+    </div>
+
+    <div class="grid-2">
+      <!-- REFINARIA -->
+      <div class="setor-card">
+        <div class="setor-header">
+          <span class="setor-name">🏭 REFINARIA</span>
+          <span class="setor-count">67</span>
+        </div>
+        <div class="setor-bar">
+          <div class="setor-fill" style="width: 61.5%;"></div>
+        </div>
+        <div class="setor-meta">
+          <strong style="color: var(--text); display: block; margin-bottom: 4px;">Funções Críticas:</strong>
+          • Caldeireiros (Níveis 2-5): 35<br>
+          • Soldadores Especializados (TIG, Nível 3-4): 8<br>
+          • Maçariqueiros: 19<br>
+          • Técnico SST + Encarregados: 5<br>
+          <strong style="color: var(--text); display: block; margin-top: 6px;">Perfil:</strong> Operações de alta criticidade, precisão e segurança
+        </div>
+      </div>
+
+      <!-- INDÚSTRIA -->
+      <div class="setor-card">
+        <div class="setor-header">
+          <span class="setor-name">⚙️ INDÚSTRIA</span>
+          <span class="setor-count">37</span>
+        </div>
+        <div class="setor-bar">
+          <div class="setor-fill" style="width: 33.9%;"></div>
+        </div>
+        <div class="setor-meta">
+          <strong style="color: var(--text); display: block; margin-bottom: 4px;">Funções de Apoio:</strong>
+          • Soldadores (Nível 1-3): 30<br>
+          • Ajudantes (Caldeireiro, Serralheiro): 4<br>
+          • Operador Furadeira Radial: 3<br>
+          <strong style="color: var(--text); display: block; margin-top: 6px;">Perfil:</strong> Suporte operacional, aprendizado e desenvolvimento
+        </div>
+      </div>
+
+      <!-- DEMALTA -->
+      <div class="setor-card">
+        <div class="setor-header">
+          <span class="setor-name">📋 DEMALTA</span>
+          <span class="setor-count">5</span>
+        </div>
+        <div class="setor-bar">
+          <div class="setor-fill" style="width: 4.6%;"></div>
+        </div>
+        <div class="setor-meta">
+          <strong style="color: var(--text); display: block; margin-bottom: 4px;">Funções Administrativas:</strong>
+          • Diretor Geral, Encarregada: 2<br>
+          • Escriturária, Auxiliar de Escritório: 2<br>
+          • Pintor, Serviços Gerais, Eletromecânico: 3<br>
+          <strong style="color: var(--text); display: block; margin-top: 6px;">Perfil:</strong> Gestão, administração e suporte transversal
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 2: ESTRATÉGIA DE PSEUDONIMIZAÇÃO -->
+  <div class="panel">
+    <h2 class="panel-title">Estratégia de Pseudonimização & Anonimização</h2>
+    <p class="panel-subtitle">Garantindo sigilo e conformidade LGPD em 100% da coleta</p>
+
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size: 14px; margin-bottom: 10px; color: var(--text);">Codificação por Função</h3>
+        <table class="table">
+          <tr>
+            <th>Função</th>
+            <th>Código</th>
+            <th>Qtd</th>
+          </tr>
+          <tr>
+            <td>Caldeireiro Nível 5</td>
+            <td><span class="badge">C5-001 → C5-009</span></td>
+            <td>9</td>
+          </tr>
+          <tr>
+            <td>Caldeireiro Nível 3</td>
+            <td><span class="badge">C3-001 → C3-004</span></td>
+            <td>4</td>
+          </tr>
+          <tr>
+            <td>Soldador</td>
+            <td><span class="badge">SD-001 → SD-025</span></td>
+            <td>25</td>
+          </tr>
+          <tr>
+            <td>Maçariqueiro</td>
+            <td><span class="badge">MQ-001 → MQ-019</span></td>
+            <td>19</td>
+          </tr>
+        </table>
+      </div>
+
+      <div>
+        <h3 style="font-size: 14px; margin-bottom: 10px; color: var(--text);">Protocolos de Segurança</h3>
+        <div class="checklist">
+          <div class="checklist-item">
+            <input type="checkbox" checked disabled>
+            <span><strong>Consentimento Informado:</strong> Assinado antes da coleta</span>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" checked disabled>
+            <span><strong>Pseudonimização:</strong> Nomes removidos, códigos únicos atribuídos</span>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" checked disabled>
+            <span><strong>Trilha de Custódia:</strong> SHA-256 de cada resposta</span>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" checked disabled>
+            <span><strong>Segregação de Dados:</strong> Respostas separadas por setor</span>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" checked disabled>
+            <span><strong>Conformidade LGPD:</strong> Direito de acesso, retificação, apagamento</span>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" checked disabled>
+            <span><strong>Armazenamento Seguro:</strong> Google Drive encriptado + backup</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 3: CRONOGRAMA DE COLETA -->
+  <div class="panel">
+    <h2 class="panel-title">Cronograma de Coleta</h2>
+    <p class="panel-subtitle">23-24 de Abril de 2026 | 07:00 às 17:00 horas</p>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <strong>23 de Abril</strong>
+        <small>Manhã: Refinaria (30-35 colaboradores)<br>
+        Tarde: Indústria (15-20 colaboradores)</small>
+      </div>
+      <div class="timeline-item">
+        <strong>24 de Abril</strong>
+        <small>Manhã: Indústria (17-22 colaboradores)<br>
+        Tarde: Demalta + Complementares (5 colaboradores)</small>
+      </div>
+      <div class="timeline-item">
+        <strong>Recursos</strong>
+        <small>3 tablets com acesso offline<br>
+        QR codes por setor<br>
+        Formulário COPSOQ II 52 perguntas</small>
+      </div>
+      <div class="timeline-item">
+        <strong>Tempo Médio</strong>
+        <small>11-15 minutos por respondente<br>
+        Escala Likert 1-5<br>
+        Coleta presencial</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 4: MAPEAMENTO TÉCNICO -->
+  <div class="panel">
+    <h2 class="panel-title">Mapeamento Técnico da Coleta</h2>
+    <p class="panel-subtitle">Estrutura operacional para 100% de participação</p>
+
+    <div style="margin-bottom: 20px;">
+      <h3 style="font-size: 13px; margin-bottom: 10px; color: var(--text);">Setor REFINARIA (67 colaboradores)</h3>
+      <table class="table">
+        <tr>
+          <th>Função</th>
+          <th>Quantidade</th>
+          <th>Código Base</th>
+          <th>Local</th>
+        </tr>
+        <tr>
+          <td>Caldeireiro Níveis 2-5</td>
+          <td>35</td>
+          <td>C2-001:C5-009</td>
+          <td>Piso Refinaria</td>
+        </tr>
+        <tr>
+          <td>Soldador (Especializado)</td>
+          <td>8</td>
+          <td>SD-TIG, SD-N3, SD-N4</td>
+          <td>Setor de Soldagem</td>
+        </tr>
+        <tr>
+          <td>Maçariqueiro</td>
+          <td>19</td>
+          <td>MQ-001:MQ-019</td>
+          <td>Área de Preparação</td>
+        </tr>
+        <tr>
+          <td>Técnico SST + Encarregados</td>
+          <td>5</td>
+          <td>SST-001, ENC-001:002</td>
+          <td>Escritório Setorial</td>
+        </tr>
+      </table>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <h3 style="font-size: 13px; margin-bottom: 10px; color: var(--text);">Setor INDÚSTRIA (37 colaboradores)</h3>
+      <table class="table">
+        <tr>
+          <th>Função</th>
+          <th>Quantidade</th>
+          <th>Código Base</th>
+          <th>Local</th>
+        </tr>
+        <tr>
+          <td>Soldador Níveis 1-3</td>
+          <td>30</td>
+          <td>SD-001:SD-030</td>
+          <td>Galpão Principal</td>
+        </tr>
+        <tr>
+          <td>Ajudante de Caldeireiro</td>
+          <td>2</td>
+          <td>AJC-001:002</td>
+          <td>Galpão Principal</td>
+        </tr>
+        <tr>
+          <td>Ajudante de Serralheiro</td>
+          <td>2</td>
+          <td>AJS-001:002</td>
+          <td>Setor Serralheria</td>
+        </tr>
+        <tr>
+          <td>Operador Furadeira Radial</td>
+          <td>3</td>
+          <td>OFR-001:003</td>
+          <td>Sala Usinagem</td>
+        </tr>
+      </table>
+    </div>
+
+    <div>
+      <h3 style="font-size: 13px; margin-bottom: 10px; color: var(--text);">Setor DEMALTA (5 colaboradores)</h3>
+      <table class="table">
+        <tr>
+          <th>Função</th>
+          <th>Quantidade</th>
+          <th>Código Base</th>
+          <th>Local</th>
+        </tr>
+        <tr>
+          <td>Gestão (Diretor, Encarregada)</td>
+          <td>2</td>
+          <td>GST-001:002</td>
+          <td>Escritório Executivo</td>
+        </tr>
+        <tr>
+          <td>Administrativo (Escriturária, Auxiliar)</td>
+          <td>2</td>
+          <td>ADM-001:002</td>
+          <td>Escritório Administrativo</td>
+        </tr>
+        <tr>
+          <td>Apoio (Pintor, Serviços Gerais, Eletromecânico)</td>
+          <td>3</td>
+          <td>APO-001:003</td>
+          <td>Áreas Diversas</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 5: PRÓXIMOS PASSOS -->
+  <div class="panel">
+    <h2 class="panel-title">Checklist Pré-Campanha</h2>
+    <p class="panel-subtitle">Validação de conformidade e preparação operacional</p>
+
+    <div class="checklist">
+      <div class="checklist-item">
+        <input type="checkbox">
+        <span><strong>[ ] Aprovação Executiva:</strong> Diretor Geral validar cronograma e recursos</span>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox">
+        <span><strong>[ ] Comunicação Interna:</strong> E-mail para todos os 109 colaboradores (23/04 às 06:30h)</span>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox">
+        <span><strong>[ ] Preparação de Tablets:</strong> 3 dispositivos com COPSOQ II offline</span>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox">
+        <span><strong>[ ] QR Codes por Setor:</strong> Impressos em papel A4 (Refinaria, Indústria, Demalta)</span>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox">
+        <span><strong>[ ] Termos de Consentimento:</strong> 110 cópias impressas (códigos pseudônimos)</span>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox">
+        <span><strong>[ ] Briefing com Encarregados:</strong> Instruções sobre coleta e código de setor</span>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox">
+        <span><strong>[ ] Backup de Dados:</strong> Configurar sincronização automática Google Drive</span>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox">
+        <span><strong>[ ] Plano de Contingência:</strong> Procedimento para participantes faltosos (24/04 complementar)</span>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox">
+        <span><strong>[ ] Monitoramento Diário:</strong> Dashboard de participação em tempo real</span>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox">
+        <span><strong>[ ] Conformidade LGPD:</strong> Assinatura do Termo de Privacidade por setor</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 6: RESUMO EXECUTIVO -->
+  <div class="panel">
+    <h2 class="panel-title">Resumo Executivo da Campanha</h2>
+    <p class="panel-subtitle">Visão estratégica e resultados esperados</p>
+
+    <div class="callout success">
+      <strong>✓ Campanha Estruturada e Pronta</strong><br>
+      A coleta de dados psicossociais da Caldeiraria Pai e Filhos está estruturada para máxima participação (100%), conformidade LGPD total e análise estratégica segmentada por setor operacional. A pseudonimização garante confidencialidade completa. Resultado esperado: diagnóstico robusto com 109 respondentes válidos para orientar políticas de saúde ocupacional.
+    </div>
+
+    <table class="table">
+      <tr>
+        <th>Parâmetro</th>
+        <th>Valor</th>
+      </tr>
+      <tr>
+        <td><strong>Empresa</strong></td>
+        <td>LUAN CARLOS COUTINHO LTDA (Caldeiraria Pai e Filhos)</td>
+      </tr>
+      <tr>
+        <td><strong>CNPJ</strong></td>
+        <td>49.625.070/0001-24</td>
+      </tr>
+      <tr>
+        <td><strong>Total de Colaboradores</strong></td>
+        <td>109 (mapeados 100%)</td>
+      </tr>
+      <tr>
+        <td><strong>Setores</strong></td>
+        <td>Refinaria (67) | Indústria (37) | Demalta (5)</td>
+      </tr>
+      <tr>
+        <td><strong>Instrumento</strong></td>
+        <td>COPSOQ II (52 perguntas, escala Likert 1-5)</td>
+      </tr>
+      <tr>
+        <td><strong>Período</strong></td>
+        <td>23-24 de Abril de 2026</td>
+      </tr>
+      <tr>
+        <td><strong>Horário</strong></td>
+        <td>07:00 às 17:00 (jornada de trabalho completa)</td>
+      </tr>
+      <tr>
+        <td><strong>Tempo Médio</strong></td>
+        <td>11-15 minutos por respondente</td>
+      </tr>
+      <tr>
+        <td><strong>Meta de Participação</strong></td>
+        <td>100% (109/109 respondentes)</td>
+      </tr>
+      <tr>
+        <td><strong>Conformidade</strong></td>
+        <td>LGPD | NR-01 | ISO 45001 | ISO 45003</td>
+      </tr>
+      <tr>
+        <td><strong>Entrega Esperada</strong></td>
+        <td>Relatório + Dashboard + Plano de Ação (Maio/2026)</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p style="margin-bottom: 8px;"><strong>SEVEN Saúde Ocupacional</strong> | Dashboard de Criação de Campanha</p>
+    <p style="margin-bottom: 4px;">Caldeiraria Pai e Filhos | CNPJ: 49.625.070/0001-24</p>
+    <p>Campanha Psicossocial 2026 | Período: 23-24 de Abril | Horário: 07:00-17:00 | Participação: 109 colaboradores</p>
+  </div>
+
+</div>
+
+</body>
+</html>
